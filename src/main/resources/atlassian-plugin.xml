@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<atlassian-plugin key="${atlassian.plugin.key}" name="${project.name}" plugins-version="2"> 
+  <plugin-info> 
+    <description>${project.description}</description>  
+    <version>${project.version}</version>  
+    <vendor name="${project.organization.name}" url="${project.organization.url}"/>  
+    <param name="plugin-icon">images/pluginIcon.png</param>  
+    <param name="plugin-logo">images/pluginLogo.png</param> 
+  </plugin-info>  
+  <!-- add our i18n resource -->  
+  <resource type="i18n" name="i18n" location="GroupMembership"/>  
+  <!-- add our web resources -->  
+  <web-resource key="GroupMembership-resources" name="GroupMembership Web Resources"> 
+    <dependency>com.atlassian.auiplugin:ajs</dependency>  
+    <resource type="download" name="GroupMembership.css" location="/css/GroupMembership.css"/>  
+    <resource type="download" name="GroupMembership.js" location="/js/GroupMembership.js"/>  
+    <resource type="download" name="images/" location="/images"/>  
+    <context>GroupMembership</context> 
+  </web-resource>  
+  <servlet name="group membership Servlet" i18n-name-key="group-membership.name" key="group-membership-servlet" class="com.jira.ultimate.grouplist.GroupMembership.plugin.GroupMembership">
+    <description key="change-filter-owner.description">Group MemberShip Servlet</description>
+    <url-pattern>/GroupMembership</url-pattern>
+  </servlet>
+  <web-section name="gpMembershipMySection" i18n-name-key="gpMembershipMy-section.name" key="gpMembershipmy-section" location="my-item-link" weight="1000"> 
+  </web-section>  
+  <web-item name="GroupMembership" i18n-name-key="gp-membership.name" key="gp-membership" section="system.top.navigation.bar" weight="1000"> 
+    <label key="my-item.label"/>  
+    <link linkId="my-item-link"/>  
+     <condition class="com.atlassian.jira.plugin.webfragment.conditions.UserLoggedInCondition">
+   </condition>
+  </web-item>  
+  <web-item name="Atlassian Developers Site" i18n-name-key="atlassian-developers-site.name" key="atlassian-developers-site" section="my-item-link/gpMembershipmy-section" weight="1000">
+    <label key="atlassian-developers-site.label"></label>  
+    <link linkId="atlassian-developers-site-link">/plugins/servlet/GroupMembership</link> 
+    
+  </web-item>
+</atlassian-plugin>
