@@ -1,0 +1,73 @@
+
+		
+		form.aui .field-group>label{
+				display: block;
+				float: none;
+				margin: 0px 50px 5px -150px;
+			    padding: 0;
+			    text-align: left;
+			    width: auto;
+				position: relative;
+				font-family: Arial,sans-serif;
+    			font-size: 14px;
+    			line-height: 1.42857142857143;
+    			color: #707070
+				}		
+             
+           form.aui .text{
+			
+			    margin: 0px 50px 5px -150px;    
+			    
+            }
+                 
+            
+        form.aui .div1 .p1{
+                width: auto
+                border: 1px solid red;
+                float: left;
+                height: 500px;
+			    margin: 0px 50px 5px -150px;
+			    
+            } 
+           
+         .mod-header, #oauth_access_tokens{ 
+           display:none
+         
+         }
+         
+         #viewissue-export{
+             float:right;
+             top:0%
+         
+         }
+		
+            
+
+			#myTable {
+			    border-collapse: collapse; /* Collapse borders */
+			    width: 100%; /* Full-width */
+			    border: none; /* Add a grey border */
+			    font-size: 18px; /* Increase font-size */
+			    font-family: Arial,sans-serif
+			}
+
+			#myTable th, #myTable td {
+			    text-align: left; /* Left-align text */
+			    padding: 12px; /* Add padding */
+			    border: 0;
+			    font-family: Arial,sans-serif;
+    			font-size: 14px;
+			}
+
+			#myTable tr {
+			    /* Add a bottom border to all table rows */
+			    border-bottom: 1px solid #ddd; 
+			    font-family: Arial,sans-serif;
+    			font-size: 14px;
+			}
+			
+			#myTable tr.header, #myTable tr:hover {
+			    /* Add a grey background color to the table header and on hover */
+			    background-color: white;
+			    
+			}

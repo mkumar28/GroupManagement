@@ -11,7 +11,7 @@
   <!-- add our i18n resource -->  
   <resource type="i18n" name="i18n" location="GroupMembership"/>  
   <!-- add our web resources -->  
-  <web-resource key="GroupMembership-resources" name="GroupMembership Web Resources"> 
+  <web-resource key="GroupMembership-resources" name="GroupMembership-resources"> 
     <dependency>com.atlassian.auiplugin:ajs</dependency>  
     <resource type="download" name="GroupMembership.css" location="/css/GroupMembership.css"/>  
     <resource type="download" name="GroupMembership.js" location="/js/GroupMembership.js"/>  

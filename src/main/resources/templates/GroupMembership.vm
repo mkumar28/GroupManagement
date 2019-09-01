@@ -5,96 +5,44 @@
 <link rel="stylesheet" type="text/css" href="/css/view-issue-screen.css">
    <head>
       $webResourceManager.requireResource("com.atlassian.auiplugin:dialog2")
-      $webResourceManager.requireResource("com.atlassian.auiplugin:aui-select2")
-      #$webResourceManager.requireResource("com.example.plugins.tutorial:change-filter-owner-resources")
       <title>My Admin</title>
-      <meta name="decorator" content="atl.admin">
-      <meta name="admin.active.section" content="atl.jira.proj.config"/>
-      <!--<meta name="projectKey" content='$project.key'/>-->
-      <meta name="admin.active.tab" content="slack-administration-section/slack-integration"/>
-      <style>
+     <meta name="decorator" content="atl.userprofile"/>
+     <meta name="tab" content="foo.bar">
+     <!--<meta name="projectKey" content='$project.key'/>-->
+     <meta name="admin.active.tab" content="slack-administration-section/slack-integration"/>
       
-		
-		form.aui .field-group>label{
-				display: block;
-				float: none;
-				margin: 0px 50px 5px -150px;
-			    padding: 0;
-			    text-align: left;
-			    width: auto;
-				position: relative;
-				font-family: Arial,sans-serif;
-    			font-size: 14px;
-    			line-height: 1.42857142857143;
-    			color: #707070
-				}		
-             
-           form.aui .text{
-			    
-			    
-			    margin: 0px 50px 5px -150px;
-			    
-			    
-            }
-            
-        form.aui .div1 .p1{
-                width: auto
-                border: 1px solid red;
-                float: left;
-                height: 500px;
-			    margin: 0px 50px 5px -150px;
-			    
-            } 
-           
-            
-		
-            
-
-			#myTable {
-			    border-collapse: collapse; /* Collapse borders */
-			    width: 100%; /* Full-width */
-			    border: none; /* Add a grey border */
-			    font-size: 18px; /* Increase font-size */
-			    font-family: Arial,sans-serif
-			}
-
-			#myTable th, #myTable td {
-			    text-align: left; /* Left-align text */
-			    padding: 12px; /* Add padding */
-			    border: 0;
-			}
-
-			#myTable tr {
-			    /* Add a bottom border to all table rows */
-			    border-bottom: 1px solid #ddd; 
-			}
-			
-			#myTable tr.header, #myTable tr:hover {
-			    /* Add a grey background color to the table header and on hover */
-			    background-color: white;
-			    
-			}
-		</style>
       
    </head>
    <body >
       <h1>Groups</h1>
       <form id="admin" class="aui" action="" method="POST">
          <div class="field-group">
-            <template id="resultstemplate">
-						#foreach( $opt in $groupList )
-						<option  value="$opt">$opt</option>
-						#end
-			</template>
-			<label for="name">Find Group</label>
-			<input type="text" name="selectGroup" id="selectGroup"  placeholder="Type Group Name.." list="searchresults"  class="text" >
-			<datalist id="searchresults"></datalist>
+             <a href="#" id="viewissue-export" aria-haspopup="true"  onclick="exportTableToCSV('members.csv')"
+		         class="aui-button" 
+		         original-title="Export this issue in another format" resolved="" aria-controls="viewissue-export_drop" aria-expanded="false" onclick="exportTableToCSV('members.csv')"><span class="icon icon-default aui-icon aui-icon-small aui-iconfont-export"></span> 
+		         <span class="dropdown-text">Export</span></a>
+		      
+			<label for="name">Select Group</label>
+			
+			<Select name="selectGroup"id="selectGroup"  placeholder="Type Group Name.." class="text">
+				#if($gpName == '')
+				<option value=""> </option>
+				#else
+				<option  value="$gpName">$gpName</option>
+				#end
+				<#foreach( $opt in $groupList )
+				  #if($opt != $gpName)
+				   <option  value="$opt">$opt</option>
+				 #end
+				#end
+			</select>
 		</div>
+		<br>
 		<div class="div1">
 			<button type="submit" id="groups-filter-submit" name="Filter" value="Filter" class="aui-button">Filter</button> 
         </div>
 		</br>
-         <p class="p1">Displaying <b>$activeUsers.size()</b> users.</p>
+         <p class="p1">Displaying <b>$activeUsers.size()</b> users from group $gpName<p>
          <table id="myTable">
             <tr class="header">
                <th style="width:50%;">User Name</th>
@@ -105,53 +53,12 @@
             <tr>
                <td headers="Value">$opt.username</td>
                <td headers="Value">$opt.displayName</td>
-               <td headers="Value">$opt.emailAddress</td>
-              <!-- <td headers="Value"><input type="submit"  id="dialog-show-button" name="Change Owner" value="Change Owner" class="button"></td>-->
+               <td headers="Value"><a href="mailto:">$opt.emailAddress</td>
+             <!-- <td headers="Value"><input type="submit"  id="dialog-show-button" name="Change Owner" value="Change Owner" class="button"></td>-->
             </tr>
             #end
          </table>
        </form>
-
-       <script>
-	
-      
-			function myFunction() {
-			  // Declare variables 
-			  var input, filter, table, tr, td, i;
-			  input = document.getElementById("value");
-			  filter = input.value.toUpperCase();
-			  table = document.getElementById("myTable");
-			  tr = table.getElementsByTagName("tr");
-			
-			  // Loop through all table rows, and hide those who don't match the search query
-			  for (i = 0; i < tr.length; i++) {
-			    td = tr[i].getElementsByTagName("td")[0];
-			    if (td) {
-			      if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
-			        tr[i].style.display = "";
-			      } else {
-			        tr[i].style.display = "none";
-			      }
-			    } 
-			  }
-			}
-
- 
-     //Typeahead field. 
-		var search = document.querySelector('#selectGroup');
-		var results = document.querySelector('#searchresults');
-		var templateContent = document.querySelector('#resultstemplate').content;
-		search.addEventListener('keyup', function handler(event) {
-		    while (results.children.length) results.removeChild(results.firstChild);
-		    var inputVal = new RegExp(search.value.trim(), 'i');
-		    var set = Array.prototype.reduce.call(templateContent.cloneNode(true).children, function searchFilter(frag, item, i) {
-		        if (inputVal.test(item.textContent) && frag.children.length < 6) frag.appendChild(item);
-		        return frag;
-		    }, document.createDocumentFragment());
-		    results.appendChild(set);
-		});
-		
-	</script>
-       
+                
 	</body>   
 </html>

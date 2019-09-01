@@ -37,17 +37,21 @@ import com.atlassian.plugin.spring.scanner.annotation.imports.ComponentImport;
 import com.atlassian.sal.api.ApplicationProperties;
 import com.atlassian.sal.api.UrlMode;
 import com.atlassian.sal.api.auth.LoginUriProvider;
-import com.atlassian.sal.api.pluginsettings.PluginSettings;
 import com.atlassian.sal.api.pluginsettings.PluginSettingsFactory;
 import com.atlassian.sal.api.user.UserRole;
 import com.atlassian.sal.api.websudo.WebSudoManager;
 import com.atlassian.sal.api.websudo.WebSudoSessionException;
 import com.atlassian.templaterenderer.TemplateRenderer;
+import com.atlassian.webresource.api.assembler.PageBuilderService;
 
 
 
 @Scanned
 public class GroupMembership extends HttpServlet {
+	
+	@ComponentImport
+    private PageBuilderService pageBuilderService;
+
 
 	private static final long serialVersionUID = 1L;
 
@@ -98,7 +102,7 @@ public class GroupMembership extends HttpServlet {
 			LoginUriProvider loginUriProvider, PluginSettingsFactory pluginSettingsFactory,
 			CustomFieldManager CustomFieldManager, ProjectManager ProjectManager, AuditingService auditingService,
 			AuditingManager auditingManager, WebSudoManager webSudoManager, ApplicationProperties applicationProperties,SearchRequestManager searchRequestManager,
-			 GroupManager groupManager,GroupPickerSearchService groupPickerSearchService,GlobalPermissionManager globalPermissionManager
+			 GroupManager groupManager,GroupPickerSearchService groupPickerSearchService,GlobalPermissionManager globalPermissionManager,PageBuilderService pageBuilderService
 			
 	) {
 		super();
@@ -116,6 +120,7 @@ public class GroupMembership extends HttpServlet {
 		this.groupManager = groupManager;
 		this.groupPickerSearchService = groupPickerSearchService;
 		this.globalPermissionManager = globalPermissionManager;
+		 this.pageBuilderService = pageBuilderService;
 	}
 
 	ArrayList<SearchRequest> searchRequest = new ArrayList<SearchRequest>();	
@@ -145,6 +150,9 @@ public class GroupMembership extends HttpServlet {
 	@SuppressWarnings("unchecked")
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		
+		/**Initializing the CSS File**/
+		pageBuilderService.assembler().resources().requireWebResource("com.jira.ultimate.grouplist.GroupMembership:GroupMembership-resources");
 		
 		/**Intitalizing properties file**/
 		if (is!=null)
@@ -207,6 +215,7 @@ public class GroupMembership extends HttpServlet {
 			/**Adding the Filters and Active users to the Map with the key**/ 
 			serachfilters.put("groupList", GroupList);
 			serachfilters.put("activeUsers", applicationUserActive);
+			serachfilters.put("gpName", groupName);
 			
 			/**creating user picker field**/
 				 
@@ -228,6 +237,7 @@ public class GroupMembership extends HttpServlet {
 		//Getting user login. Allowing only Project Lead and System Admin to access the page.
 		System.out.println("DO POST METHOD CALL");
 		//webSudoManager.willExecuteWebSudoRequest(req);
+		
 		ApplicationUser appuser = ComponentAccessor.getJiraAuthenticationContext().getUser();
 		if (appuser == null)
 				{
@@ -248,7 +258,10 @@ public class GroupMembership extends HttpServlet {
 				
 				
 				 groupName = req.getParameter("selectGroup");
-		
+				 String userid = req.getParameter("userid");
+				 //String export = req.getParameter("viewissue-export");
+				 System.out.println(userid);
+		     
 				 doGet(req, response);
 		
 				
